@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spectrogram Generator & Micro-Doppler Classifier</title>
+  <style>
+    /* Background gradient with subtle animation */
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d, #22c1c3);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px 50px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      width: 360px;
+      animation: fadeInUp 1s ease forwards;
+      text-align: center;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      box-shadow: 0 0 10px #ffbb33;
+    }
+
+    /* File input styling */
+    input[type="file"] {
+      margin: 15px 0 25px;
+      width: 100%;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Button styled as clickable image */
+    .btn {
+      display: inline-block;
+      background: #ffbb33;
+      color: #000;
+      font-weight: 700;
+      padding: 12px 30px;
+      margin-top: 10px;
+      border-radius: 30px;
+      cursor: pointer;
+      border: none;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #ffc94d;
+      transform: scale(1.05);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Separate form containers */
+    form {
+      margin-bottom: 40px;
+      text-align: left;
+    }
+
+    /* Responsive */
+    @media (max-width: 400px) {
+      .container {
+        width: 90%;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form action="/generate" method="POST" autocomplete="off">
+      <h1>Generate Spectrogram</h1>
+      <label for="amplitudes">Enter Amplitude Values (comma-separated):</label>
+      <input type="text" id="amplitudes" name="amplitudes" placeholder="e.g. 0.1,0.3,0.6,0.2" required />
+      <button type="submit" class="btn">Generate Spectrogram</button>
+    </form>
+
+    <form action="/predict" method="post" enctype="multipart/form-data">
+      <h1>Upload Image for Classification</h1>
+      <input type="file" name="file" accept="image/*" required />
+      <button type="submit" class="btn">Upload & Predict</button>
+    </form>
+  </div>
+</body>
+</html>

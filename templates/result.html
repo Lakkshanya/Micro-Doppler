@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Classification Result</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: 1.5px;
+    }
+
+    .classification {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 20px 0;
+      padding: 15px 20px;
+      border-radius: 50px;
+      background: #ffbb33;
+      color: #000;
+      display: inline-block;
+      box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
+      }
+      50% {
+        box-shadow: 0 8px 25px rgba(255, 187, 51, 0.9);
+      }
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.7);
+      margin-top: 20px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 35px;
+      padding: 12px 30px;
+      border-radius: 30px;
+      background: #ffbb33;
+      color: #000;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1rem;
+      box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    a:hover {
+      background: #ffc94d;
+      transform: scale(1.05);
+    }
+
+    a:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Classification Result</h1>
+
+    {% if image_path %}
+      <!-- For Spectrogram classification -->
+      <img src="{{ image_path }}" alt="Spectrogram Image" />
+      <div class="classification">Classification: {{ classification }}</div>
+      <br>
+      <a href="/">Generate Another</a>
+
+    {% elif file_path and prediction %}
+      <!-- For uploaded image classification -->
+      <div class="classification">{{ prediction }}</div>
+      <a href="/">Upload Another Image</a>
+
+    {% else %}
+      <p>No result available.</p>
+      <a href="/">Go Back</a>
+    {% endif %}
+  </div>
+</body>
+</html>
