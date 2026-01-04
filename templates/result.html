@@ -1,133 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Classification Result</title>
+  <title>Analysis Result - Micro-Doppler</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    :root {
+      --primary-color: #003366;
+      --primary-light: #004d99;
+      --accent-color: #ffc107;
+      --bg-color: #f0f2f5;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --success-color: #059669;
+      /* Rich Green */
+      --success-bg: #ecfdf5;
+      --alert-color: #dc2626;
+      /* Rich Red */
+      --alert-bg: #fef2f2;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      margin: 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      height: 100vh;
-      font-family: 'Poppins', sans-serif;
-      color: #fff;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      overflow: hidden;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
-    .container {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 40px 50px;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-      max-width: 480px;
+    header {
+      background-color: var(--primary-color);
+      color: var(--card-bg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-inner {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand i {
+      color: var(--accent-color);
+    }
+
+    main {
+      flex: 1;
+      width: 90%;
+      max-width: 800px;
+      margin: 3rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .result-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      padding: 3rem;
       width: 100%;
       text-align: center;
-      animation: fadeInUp 1s ease forwards;
+      animation: fadeIn 0.5s ease-out;
     }
 
-    @keyframes fadeInUp {
-      0% {
+    @keyframes fadeIn {
+      from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: scale(0.98);
       }
-      100% {
+
+      to {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1);
       }
     }
 
     h1 {
-      margin-bottom: 25px;
-      font-weight: 700;
-      font-size: 2.2rem;
-      letter-spacing: 1.5px;
-    }
-
-    .classification {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 20px 0;
-      padding: 15px 20px;
-      border-radius: 50px;
-      background: #ffbb33;
-      color: #000;
+      font-size: 1.75rem;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border-color);
       display: inline-block;
-      box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
-      animation: pulse 2.5s infinite;
+      padding-bottom: 0.5rem;
     }
 
-    @keyframes pulse {
-      0%, 100% {
-        box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
-      }
-      50% {
-        box-shadow: 0 8px 25px rgba(255, 187, 51, 0.9);
-      }
+    /* Result Image logic */
+    .img-wrapper {
+      background: #fff;
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      display: inline-block;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
     }
 
-    img {
+    .result-image {
       max-width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.7);
-      margin-top: 20px;
-      transition: transform 0.3s ease;
-      cursor: pointer;
+      height: auto;
+      border-radius: 4px;
+      max-height: 400px;
     }
 
-    img:hover {
-      transform: scale(1.05);
-    }
-
-    a {
-      display: inline-block;
-      margin-top: 35px;
-      padding: 12px 30px;
-      border-radius: 30px;
-      background: #ffbb33;
-      color: #000;
+    /* Status Box */
+    .status-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 2.5rem;
+      border-radius: 50px;
+      /* Pill shape */
+      font-size: 1.5rem;
       font-weight: 700;
+      background-color: #f3f4f6;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .status-box i {
+      font-size: 1.75rem;
+    }
+
+    /* Drone = Alert */
+    .status-box.drone {
+      background-color: var(--alert-bg);
+      color: var(--alert-color);
+      border: 1px solid #fee2e2;
+    }
+
+    /* Bird = Success */
+    .status-box.bird {
+      background-color: var(--success-bg);
+      color: var(--success-color);
+      border: 1px solid #d1fae5;
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 2rem;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      border-radius: var(--radius);
       text-decoration: none;
-      font-size: 1rem;
-      box-shadow: 0 5px 15px rgba(255, 187, 51, 0.6);
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
     }
 
-    a:hover {
-      background: #ffc94d;
-      transform: scale(1.05);
+    .btn:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
-    a:active {
-      transform: scale(0.95);
+    footer {
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 2rem 0;
+      margin-top: auto;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Classification Result</h1>
 
-    {% if image_path %}
-      <!-- For Spectrogram classification -->
-      <img src="{{ image_path }}" alt="Spectrogram Image" />
-      <div class="classification">Classification: {{ classification }}</div>
-      <br>
-      <a href="/">Generate Another</a>
+  <header role="banner">
+    <div class="header-inner">
+      <div class="brand">
+        <i class="fa-solid fa-wave-square"></i>
+        <span>Micro-Doppler Analysis</span>
+      </div>
+    </div>
+  </header>
 
-    {% elif file_path and prediction %}
-      <!-- For uploaded image classification -->
-      <div class="classification">{{ prediction }}</div>
-      <a href="/">Upload Another Image</a>
+  <main id="main-content" role="main">
+    <div class="result-card">
+      <h1>Analysis Result</h1>
 
-    {% else %}
-      <p>No result available.</p>
-      <a href="/">Go Back</a>
-    {% endif %}
-  </div>
+      {% if image_path %}
+      <div class="img-wrapper">
+        <img src="{{ image_path }}" alt="Generated Spectrogram" class="result-image">
+      </div>
+      <div>
+        <!-- Conditional Icon/Style based on classification -->
+        {% if classification == 'Drone' %}
+        <div class="status-box drone">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Target: DRONE</span>
+        </div>
+        {% else %}
+        <div class="status-box bird">
+          <i class="fa-solid fa-dove"></i>
+          <span>Target: BIRD</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="actions">
+        <a href="/" class="btn">
+          <i class="fa-solid fa-rotate-right"></i> Generate New
+        </a>
+      </div>
+
+      {% elif file_path and prediction %}
+
+      <div>
+        {% if prediction == 'Drone' %}
+        <div class="status-box drone">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Detected: DRONE</span>
+        </div>
+        {% else %}
+        <div class="status-box bird">
+          <i class="fa-solid fa-dove"></i>
+          <span>Detected: BIRD</span>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if file_path %}
+      <p style="margin-bottom: 2rem; color: #666;">
+        <i class="fa-regular fa-file-image"></i> {{ file_path }}
+      </p>
+      {% endif %}
+
+      <div class="actions">
+        <a href="/" class="btn">
+          <i class="fa-solid fa-arrow-left"></i> Analyze Another
+        </a>
+      </div>
+
+      {% else %}
+      <p>No result data found.</p>
+      <div class="actions">
+        <a href="/" class="btn">Return Home</a>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Micro-Doppler Classification System | <b style="color: var(--primary-color);">Official Use Only</b>
+    </p>
+  </footer>
+
 </body>
+
 </html>
